@@ -11,7 +11,6 @@ import net.benmur.frameprint.analyzer.ColorSupport
 import net.benmur.frameprint.analyzer.ImageAnalyzer
 import net.benmur.frameprint.input.Eof
 import net.benmur.frameprint.input.xuggle.XuggleReader
-import net.benmur.frameprint.output.HtmlColorReporter
 import net.benmur.frameprint.output.ImageColorOutput
 
 object FramePrint {
@@ -21,7 +20,6 @@ object FramePrint {
         Config.COLOR_DIFF_THRESHOLD,
         Config.FRAME_GROUP_SIZE,
         (c: ImageAnalyzer with ColorSupport) => {
-          new HtmlColorReporter(file + ".html").writeStatsFrom(c)
           new ImageColorOutput(file + ".png").writeStatsFrom(c)
         })
 
