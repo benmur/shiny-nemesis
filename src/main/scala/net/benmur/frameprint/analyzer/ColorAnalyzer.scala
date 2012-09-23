@@ -11,6 +11,8 @@ import scala.collection.mutable.ListMap
 import scala.collection.mutable.Map
 
 import net.benmur.frameprint.Config
+import net.benmur.frameprint.analyzer.ColorSupport
+import net.benmur.frameprint.analyzer.ImageAnalyzer
 
 class ColorAnalyzer(
   private val tolerance: Int,
@@ -19,20 +21,23 @@ class ColorAnalyzer(
   extends ImageAnalyzer with ColorSupport {
 
   private var currentFrame = 0
-  private val maps: ArrayBuffer[Map[Int, Int]] = ArrayBuffer[Map[Int, Int]]()
+  private var currentFrameMap = Map[Int, Int]()
+  private val finalMaps: ArrayBuffer[scala.collection.Map[(Int, Int, Int), Int]] = ArrayBuffer[scala.collection.Map[(Int, Int, Int), Int]]()
 
   override def finish() = {
     println("color analyzer finishing")
+    rotateColorMap()
     endOfWorkAction(this)
   }
 
-  override def frameGroups = maps size
-  override def colorSpreadMap(frameGroup: Int): scala.collection.Map[(Int, Int, Int), Int] = ListMap(
-    maps(frameGroup).
-      toList.
+  override def frameGroups = finalMaps size
+  override def colorSpreadMap(frameGroup: Int): scala.collection.Map[(Int, Int, Int), Int] = finalMaps(frameGroup)
+
+  private def cleanupMap(map: scala.collection.Map[Int, Int]) =
+    ListMap(map.toList.
       sortBy(_._2).
-      map(convert).
-      takeRight(1): _*)
+      takeRight(1).
+      map(convert): _*)
 
   private def convert(kv: (Int, Int)): ((Int, Int, Int), Int) = kv match {
     case (k, v) => (intToRGB(k), v)
@@ -54,18 +59,22 @@ class ColorAnalyzer(
     map(rgb) = map.getOrElseUpdate(rgb, 0) + 1
   }
 
+  private def rotateColorMap() = {
+    finalMaps += cleanupMap(currentFrameMap)
+    currentFrameMap = Map[Int, Int]()
+  }
+
   override def receive(pic: Picture) = {
-    if (currentFrame % frameGroupSize == 0) {
-      maps += Map[Int, Int]()
+    if (currentFrame % frameGroupSize == 0 && !currentFrameMap.isEmpty) {
+      rotateColorMap()
     }
     currentFrame += 1
 
-    val frameMap = maps.last
     pic eachPixel { rgb =>
       val (r, g, b) = intToRGB(rgb)
 
       if (isColorfulEnough(r, g, b) && isBrightEnough(r, g, b)) {
-        frameMap(rgb) = frameMap.getOrElseUpdate(rgb, 0) + 1
+        currentFrameMap(rgb) = currentFrameMap.getOrElseUpdate(rgb, 0) + 1
       }
     }
   }
