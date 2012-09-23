@@ -10,6 +10,7 @@ package object analyzer {
   trait ImageAnalyzer {
     def receive(pic: Picture): Unit
     def frameGroups: Int
+    def finish(): Unit
   }
 
   trait ColorSupport {

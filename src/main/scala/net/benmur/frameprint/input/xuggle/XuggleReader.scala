@@ -21,15 +21,22 @@ import net.benmur.frameprint.input.Reader
 class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
   extends Reader {
 
+  val frameListener = new XuggleFrameListener(analyzer)
+
   val xreader = ToolFactory.makeReader(file)
   xreader.setQueryMetaData(false)
   xreader.setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR)
-  xreader.addListener(new XuggleFrameListener(analyzer))
+  xreader.addListener(frameListener)
 
   @tailrec
   private def read(packet: Int): ReadStatus = xreader.readPacket() match {
-    case null => if ((MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0) read(packet + 1) else Eof
-    case error => println(error); Eof
+    case null => if ((MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0) read(packet + 1) else shutdown()
+    case error => println(error); shutdown()
+  }
+
+  private def shutdown(): ReadStatus = {
+    frameListener.eof()
+    Eof
   }
 
   override def readAll = try {

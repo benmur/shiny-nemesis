@@ -7,6 +7,8 @@
 package net.benmur.frameprint
 
 import net.benmur.frameprint.analyzer.ColorAnalyzer
+import net.benmur.frameprint.analyzer.ColorSupport
+import net.benmur.frameprint.analyzer.ImageAnalyzer
 import net.benmur.frameprint.input.Eof
 import net.benmur.frameprint.input.xuggle.XuggleReader
 import net.benmur.frameprint.output.HtmlColorReporter
@@ -15,16 +17,20 @@ import net.benmur.frameprint.output.ImageColorOutput
 object FramePrint {
   def main(args: Array[String]): Unit = {
     args foreach { file =>
-      val colorAnalyzer = new ColorAnalyzer(Config.COLOR_DIFF_THRESHOLD, 25)
+      val colorAnalyzer = new ColorAnalyzer(
+        Config.COLOR_DIFF_THRESHOLD,
+        Config.FRAME_GROUP_SIZE,
+        (c: ImageAnalyzer with ColorSupport) => {
+          new HtmlColorReporter(file + ".html").writeStatsFrom(c)
+          new ImageColorOutput(file + ".png").writeStatsFrom(c)
+        })
+
       val reader = new XuggleReader(file, colorAnalyzer)
 
       reader.readAll match {
         case Eof => println("got eof")
         case e => println("_ got " + e)
       }
-
-      new HtmlColorReporter(file + ".html").writeStatsFrom(colorAnalyzer)
-      new ImageColorOutput(file + ".png").writeStatsFrom(colorAnalyzer)
     }
   }
 }

@@ -12,10 +12,19 @@ import scala.collection.mutable.Map
 
 import net.benmur.frameprint.Config
 
-class ColorAnalyzer(val tolerance: Int, val frameGroupSize: Int)
+class ColorAnalyzer(
+  private val tolerance: Int,
+  private val frameGroupSize: Int,
+  private val endOfWorkAction: (ImageAnalyzer with ColorSupport) => Unit)
   extends ImageAnalyzer with ColorSupport {
-  var currentFrame = 0
-  val maps: ArrayBuffer[Map[Int, Int]] = ArrayBuffer[Map[Int, Int]]()
+
+  private var currentFrame = 0
+  private val maps: ArrayBuffer[Map[Int, Int]] = ArrayBuffer[Map[Int, Int]]()
+
+  override def finish() = {
+    println("color analyzer finishing")
+    endOfWorkAction(this)
+  }
 
   override def frameGroups = maps size
   override def colorSpreadMap(frameGroup: Int): scala.collection.Map[(Int, Int, Int), Int] = ListMap(
