@@ -5,3 +5,5 @@ resolvers ++= Seq(
 libraryDependencies += "xuggle" % "xuggle-xuggler" % "5.2"
 
 mainClass := Some("net.benmur.frameprint.FramePrint")
+
+fork in run := true
