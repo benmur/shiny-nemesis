@@ -53,6 +53,8 @@ class ColorAnalyzer(
   private def brightness(r: Int, g: Int, b: Int): Double =
     0.299 * r + 0.587 * g + 0.114 * b
 
+  private def flattenColor(rgb: Int): Int = rgb & 0xf0f0f0
+
   private def store(rgb: Int, map: Map[Int, Int]) = {
     map(rgb) = map.getOrElseUpdate(rgb, 0) + 1
   }
@@ -69,10 +71,11 @@ class ColorAnalyzer(
     currentFrame += 1
 
     pic eachPixel { rgb =>
+      val flattened = flattenColor(rgb)
       val (r, g, b) = intToRGB(rgb)
 
       if (isColorfulEnough(r, g, b) && isBrightEnough(r, g, b)) {
-        currentFrameMap(rgb) = currentFrameMap.getOrElseUpdate(rgb, 0) + 1
+        currentFrameMap(flattened) = currentFrameMap.getOrElseUpdate(flattened, 0) + 1
       }
     }
   }
