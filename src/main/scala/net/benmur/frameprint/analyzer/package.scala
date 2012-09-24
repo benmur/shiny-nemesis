@@ -7,6 +7,8 @@
 package net.benmur.frameprint
 
 package object analyzer {
+  case class ColorQuantity(r: Int, g: Int, b: Int, quantity: Int)
+
   trait ImageAnalyzer {
     def receive(pic: Picture): Unit
     def frameGroups: Int
@@ -14,6 +16,6 @@ package object analyzer {
   }
 
   trait ColorSupport {
-    def colorSpreadMap(frameGroup: Int): scala.collection.Map[(Int, Int, Int), Int]
+    def colorSpreadMap(frameGroup: Int): (Option[ColorQuantity], Option[ColorQuantity])
   }
 }

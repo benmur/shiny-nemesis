@@ -20,7 +20,8 @@ class ColorAnalyzer(
 
   private var currentFrame = 0
   private var currentFrameMap = Map[Int, Int]()
-  private val finalMaps: ArrayBuffer[scala.collection.Map[(Int, Int, Int), Int]] = ArrayBuffer[scala.collection.Map[(Int, Int, Int), Int]]()
+  private val finalMaps: ArrayBuffer[(Option[ColorQuantity], Option[ColorQuantity])] =
+    ArrayBuffer[(Option[ColorQuantity], Option[ColorQuantity])]()
 
   override def finish() = {
     println("color analyzer finishing")
@@ -29,16 +30,21 @@ class ColorAnalyzer(
   }
 
   override def frameGroups = finalMaps size
-  override def colorSpreadMap(frameGroup: Int): scala.collection.Map[(Int, Int, Int), Int] = finalMaps(frameGroup)
+  override def colorSpreadMap(frameGroup: Int): (Option[ColorQuantity], Option[ColorQuantity]) = finalMaps(frameGroup)
 
-  private def cleanupMap(map: scala.collection.Map[Int, Int]) =
-    ListMap(map.toList.
+  private def cleanupMap(map: scala.collection.Map[Int, Int]) = {
+    val top2 = map.
+      toList.
       sortBy(_._2).
-      takeRight(1).
-      map(convert): _*)
+      takeRight(2).
+      map(toQuantity)
+    (top2 headOption, if (top2.isEmpty) None else top2.tail headOption)
+  }
 
-  private def convert(kv: (Int, Int)): ((Int, Int, Int), Int) = kv match {
-    case (k, v) => (intToRGB(k), v)
+  private def toQuantity(kv: (Int, Int)): ColorQuantity = kv match {
+    case (k, v) =>
+      val (r, g, b) = intToRGB(k)
+      ColorQuantity(r, g, b, v)
   }
 
   private def intToRGB(rgb: Int): (Int, Int, Int) =

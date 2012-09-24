@@ -8,18 +8,19 @@ package net.benmur.frameprint.output
 
 import java.io.BufferedWriter
 import java.io.FileWriter
-
 import scala.xml.NodeSeq
-
 import net.benmur.frameprint.analyzer.ColorSupport
 import net.benmur.frameprint.analyzer.ImageAnalyzer
+import net.benmur.frameprint.analyzer.ColorQuantity
 
 class HtmlColorReporter(val outputFile: String) extends Reporter {
   override def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport) = {
     println("writing to " + outputFile)
     val colors = 0 until analyzer.frameGroups flatMap { group =>
       println("  frame group " + group + "... ")
-      analyzer.colorSpreadMap(group) map (t => toHex(t._1))
+      analyzer.colorSpreadMap(group) match {
+        case (q1, q2) => q1 map toHex
+      }
     }
 
     val nodeSeq = renderDoc(colors)
@@ -29,8 +30,8 @@ class HtmlColorReporter(val outputFile: String) extends Reporter {
     println("wrote to " + outputFile)
   }
 
-  private def toHex(rgb: Tuple3[Int, Int, Int]) = {
-    "%02x%02x%02x".format(rgb._1, rgb._2, rgb._3)
+  private def toHex(rgb: ColorQuantity) = {
+    "%02x%02x%02x".format(rgb.r, rgb.g, rgb.b)
   }
 
   private def writeOut(nodes: NodeSeq, output: String) {
