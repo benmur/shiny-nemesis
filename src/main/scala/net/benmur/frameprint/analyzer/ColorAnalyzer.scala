@@ -55,10 +55,6 @@ class ColorAnalyzer(
 
   private def flattenColor(rgb: Int): Int = rgb & 0xf0f0f0
 
-  private def store(rgb: Int, map: Map[Int, Int]) = {
-    map(rgb) = map.getOrElseUpdate(rgb, 0) + 1
-  }
-
   private def rotateColorMap() = {
     finalMaps += cleanupMap(currentFrameMap)
     currentFrameMap = Map[Int, Int]()
