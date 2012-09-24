@@ -11,8 +11,6 @@ import scala.collection.mutable.ListMap
 import scala.collection.mutable.Map
 
 import net.benmur.frameprint.Config
-import net.benmur.frameprint.analyzer.ColorSupport
-import net.benmur.frameprint.analyzer.ImageAnalyzer
 
 class ColorAnalyzer(
   private val tolerance: Int,
