@@ -14,6 +14,6 @@ package object frameprint {
     val COLOR_DIFF_THRESHOLD = 20
 
     val OUTPUT_IMAGE_HEIGHT = 32
-    val OUTPUT_COLOR2_HEIGHT = 8
+    val OUTPUT_COLOR2_HEIGHT = 16
   }
 }

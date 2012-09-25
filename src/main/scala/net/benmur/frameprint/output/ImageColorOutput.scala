@@ -7,6 +7,8 @@
 package net.benmur.frameprint.output
 
 import java.awt.Color
+import java.awt.GradientPaint
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.File
 
@@ -28,26 +30,33 @@ class ImageColorOutput(val outputFile: String) extends Reporter {
   }
 
   private def createImage(colors: Seq[(Option[ColorQuantity], Option[ColorQuantity])]): BufferedImage = {
-    val image = new BufferedImage(colors size, Config.OUTPUT_IMAGE_HEIGHT, BufferedImage.TYPE_3BYTE_BGR)
-    val gr = image.createGraphics()
+    val h = Config.OUTPUT_IMAGE_HEIGHT
+    val h2 = Config.OUTPUT_COLOR2_HEIGHT
+    val image = new BufferedImage(colors size, h, BufferedImage.TYPE_INT_ARGB)
+    val g = image.createGraphics()
 
     colors.zipWithIndex map {
       case ((c1, c2), i) =>
-        c1 map {
-          case ColorQuantity(r1, g1, b1, w1) =>
-            gr.setColor(new Color(r1, g1, b1))
-            gr.drawLine(i, 0, i, Config.OUTPUT_IMAGE_HEIGHT - 1)
-        }
-        c2 map {
-          case ColorQuantity(r2, g2, b2, w2) =>
-            val c2Start = (Config.OUTPUT_IMAGE_HEIGHT - Config.OUTPUT_COLOR2_HEIGHT) / 2 - 1
-            gr.setColor(new Color(r2, g2, b2))
-            gr.drawLine(i, c2Start, i, c2Start + Config.OUTPUT_COLOR2_HEIGHT)
-        }
+        c1 map { c => drawColor(g, i, 0, h, c, c) }
+        c2 map { c => drawColor(g, i, h - h2, h2, transparent(c), c) }
     }
+
+    g.dispose()
 
     image
   }
+
+  private def drawColor(graphics: Graphics2D, x: Int, y: Int, height: Int, color1: Color, color2: Color) = {
+    val paint = new GradientPaint(0, y, color1, 0, y + height, color2);
+    graphics.setPaint(paint)
+    graphics.drawLine(x, y, x, y + height - 1)
+  }
+
+  private implicit def colorQuantity2Color(cq: ColorQuantity): Color =
+    new Color(cq.r, cq.g, cq.b)
+
+  private def transparent(c: Color): Color =
+    new Color(c.getRed, c.getGreen, c.getBlue, 0)
 
   private def writeOut(image: BufferedImage, output: String) = ImageIO.write(image, "png", new File(output))
 }
