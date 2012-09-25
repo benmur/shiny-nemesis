@@ -21,10 +21,8 @@ import net.benmur.frameprint.input.Reader
 class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
   extends Reader {
 
-  val frameListener = new XuggleFrameListener(analyzer)
-
   val xreader = ToolFactory.makeReader(file)
-  xreader.setQueryMetaData(false)
+  val frameListener = new XuggleFrameListener(analyzer, xreader.getContainer())
   xreader.setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR)
   xreader.addListener(frameListener)
 

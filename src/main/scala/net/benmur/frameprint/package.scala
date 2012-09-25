@@ -9,8 +9,6 @@ package net.benmur
 package object frameprint {
   object Config {
     val MAX_READS = -1
-    val ANALYZE_EVERY_NTH = 8
-    val FRAME_GROUP_SIZE = 25
 
     val MIN_BRIGHTNESS = 50
     val COLOR_DIFF_THRESHOLD = 20

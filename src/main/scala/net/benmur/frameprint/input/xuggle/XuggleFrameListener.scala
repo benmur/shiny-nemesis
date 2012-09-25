@@ -10,12 +10,12 @@ import scala.actors.Actor
 
 import com.xuggle.mediatool.MediaListenerAdapter
 import com.xuggle.mediatool.event.IVideoPictureEvent
+import com.xuggle.xuggler.IContainer
 
-import net.benmur.frameprint.Config.ANALYZE_EVERY_NTH
 import net.benmur.frameprint.analyzer.ImageAnalyzer
 import net.benmur.frameprint.analyzer.Picture
 
-class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer) extends MediaListenerAdapter {
+class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: IContainer) extends MediaListenerAdapter {
   private var lastPrint = System.currentTimeMillis()
   private var frames = 0
   private var totalFrames = 0
@@ -25,20 +25,18 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer) extends MediaListene
 
   override def onVideoPicture(event: IVideoPictureEvent): Unit = {
     countFrames(event)
-
-    totalFrames += 1
-    if (totalFrames % ANALYZE_EVERY_NTH == 0) {
-      analyzerActor ! QueueImage(event)
-    }
+    analyzerActor ! QueueImage(event)
+    container.seekKeyFrame(event.getStreamIndex(), 150 * totalFrames, IContainer.SEEK_FLAG_FRAME)
   }
 
   def eof() = analyzerActor ! EndOfWork
 
   def countFrames(event: IVideoPictureEvent) = {
+    totalFrames += 1
     frames += 1
     val now = System.currentTimeMillis()
     if (now - lastPrint >= 1000) {
-      println("got picture, ts=" + event.getTimeStamp() + " fps=~" + frames)
+      println("got picture, ts=" + event.getTimeStamp() + " fps=~" + frames + " total=" + totalFrames)
       lastPrint = now
       frames = 0
     }

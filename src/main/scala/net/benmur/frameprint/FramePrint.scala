@@ -17,8 +17,7 @@ object FramePrint {
   def main(args: Array[String]): Unit = {
     args foreach { file =>
       val colorAnalyzer = new ColorAnalyzer(
-        Config.COLOR_DIFF_THRESHOLD,
-        Config.FRAME_GROUP_SIZE,
+        Config.COLOR_DIFF_THRESHOLD, 1,
         (c: ImageAnalyzer with ColorSupport) => {
           new ImageColorOutput(file + ".png").writeStatsFrom(c)
         })
