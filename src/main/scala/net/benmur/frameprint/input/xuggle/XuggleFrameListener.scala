@@ -6,11 +6,13 @@
 
 package net.benmur.frameprint.input.xuggle
 
+import scala.annotation.tailrec
+
 import com.xuggle.mediatool.MediaListenerAdapter
 import com.xuggle.mediatool.event.IVideoPictureEvent
-import com.xuggle.xuggler.IContainer
+import com.xuggle.xuggler.{ IContainer, IStream }
 
-import net.benmur.frameprint.analyzer.{ImageAnalyzer, Picture}
+import net.benmur.frameprint.analyzer.{ ImageAnalyzer, Picture }
 
 class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: IContainer) extends MediaListenerAdapter {
   private var lastPrint = System.currentTimeMillis()
@@ -20,7 +22,7 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   override def onVideoPicture(event: IVideoPictureEvent): Unit = {
     countFrames(event)
     imageAnalyzer receive event
-    container.seekKeyFrame(event.getStreamIndex(), 150 * totalFrames, IContainer.SEEK_FLAG_FRAME)
+    seek(event)
   }
 
   private def countFrames(event: IVideoPictureEvent) = {
@@ -43,4 +45,21 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   }
 
   implicit private def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
+
+  private def seek(event: IVideoPictureEvent) = {
+    val streamIndex = event.getStreamIndex()
+    val stream = container.getStream(streamIndex toLong)
+    val time = stream.getIndexEntry(nextKeyFrame(stream, 150 * totalFrames)).getTimeStamp()
+    container.seekKeyFrame(streamIndex, time, 0)
+  }
+
+  @tailrec
+  private def nextKeyFrame(stream: IStream, index: Int): Int =
+    if (index >= stream.getNumIndexEntries())
+      stream.getNumIndexEntries() - 1
+    else
+      stream.getIndexEntry(index) match {
+        case e if e.isKeyFrame() => index
+        case _                   => nextKeyFrame(stream, index + 1)
+      }
 }
