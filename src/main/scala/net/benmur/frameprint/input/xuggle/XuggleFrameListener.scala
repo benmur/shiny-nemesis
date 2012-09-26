@@ -6,8 +6,6 @@
 
 package net.benmur.frameprint.input.xuggle
 
-import scala.actors.Actor
-
 import com.xuggle.mediatool.MediaListenerAdapter
 import com.xuggle.mediatool.event.IVideoPictureEvent
 import com.xuggle.xuggler.IContainer
@@ -20,16 +18,11 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   private var frames = 0
   private var totalFrames = 0
 
-  private val analyzerActor = new AnalyzerProxy(imageAnalyzer)
-  analyzerActor.start
-
   override def onVideoPicture(event: IVideoPictureEvent): Unit = {
     countFrames(event)
-    analyzerActor ! QueueImage(event)
+    imageAnalyzer receive event
     container.seekKeyFrame(event.getStreamIndex(), 150 * totalFrames, IContainer.SEEK_FLAG_FRAME)
   }
-
-  def eof() = analyzerActor ! EndOfWork
 
   def countFrames(event: IVideoPictureEvent) = {
     totalFrames += 1
@@ -43,21 +36,4 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   }
 
   implicit def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
-
-  case class QueueImage(p: Picture)
-  case object EndOfWork
-
-  class AnalyzerProxy(val analyzer: ImageAnalyzer) extends Actor {
-    def act() {
-      while (true) {
-        receive {
-          case QueueImage(p) =>
-            analyzer receive p
-          case EndOfWork =>
-            analyzer.finish()
-            exit()
-        }
-      }
-    }
-  }
 }

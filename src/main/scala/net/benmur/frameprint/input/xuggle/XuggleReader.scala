@@ -33,7 +33,7 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
   }
 
   private def shutdown(): ReadStatus = {
-    frameListener.eof()
+    analyzer.finish()
     Eof
   }
 
