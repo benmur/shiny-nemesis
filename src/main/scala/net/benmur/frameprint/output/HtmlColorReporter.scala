@@ -1,17 +1,17 @@
 /**
- * Copyright (c) 2012 Rached Ben Mustapha
- *
- * See the file LICENSE for copying permission.
- */
+  * Copyright (c) 2012 Rached Ben Mustapha
+  *
+  * See the file LICENSE for copying permission.
+  */
 
 package net.benmur.frameprint.output
 
-import java.io.BufferedWriter
-import java.io.FileWriter
+import java.io.{BufferedWriter, FileWriter}
+
+import scala.Option.option2Iterable
 import scala.xml.NodeSeq
-import net.benmur.frameprint.analyzer.ColorSupport
-import net.benmur.frameprint.analyzer.ImageAnalyzer
-import net.benmur.frameprint.analyzer.ColorQuantity
+
+import net.benmur.frameprint.analyzer.{ColorQuantity, ColorSupport, ImageAnalyzer}
 
 class HtmlColorReporter(val outputFile: String) extends Reporter {
   override def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport) = {

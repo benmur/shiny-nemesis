@@ -1,22 +1,18 @@
 /**
- * Copyright (c) 2012 Rached Ben Mustapha
- *
- * See the file LICENSE for copying permission.
- */
+  * Copyright (c) 2012 Rached Ben Mustapha
+  *
+  * See the file LICENSE for copying permission.
+  */
 
 package net.benmur.frameprint.output
 
-import java.awt.Color
-import java.awt.GradientPaint
-import java.awt.Graphics2D
+import java.awt.{Color, GradientPaint, Graphics2D}
 import java.awt.image.BufferedImage
 import java.io.File
 
 import javax.imageio.ImageIO
 import net.benmur.frameprint.Config
-import net.benmur.frameprint.analyzer.ColorQuantity
-import net.benmur.frameprint.analyzer.ColorSupport
-import net.benmur.frameprint.analyzer.ImageAnalyzer
+import net.benmur.frameprint.analyzer.{ColorQuantity, ColorSupport, ImageAnalyzer}
 
 class ImageColorOutput(val outputFile: String) extends Reporter {
 

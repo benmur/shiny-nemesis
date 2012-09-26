@@ -1,21 +1,19 @@
 /**
- * Copyright (c) 2012 Rached Ben Mustapha
- *
- * See the file LICENSE for copying permission.
- */
+  * Copyright (c) 2012 Rached Ben Mustapha
+  *
+  * See the file LICENSE for copying permission.
+  */
 
 package net.benmur.frameprint.analyzer
 
-import scala.collection.mutable.ArrayBuffer
-import scala.collection.mutable.ListMap
-import scala.collection.mutable.Map
+import scala.collection.mutable.{ArrayBuffer, Map}
 
 import net.benmur.frameprint.Config
 
 class ColorAnalyzer(
   private val tolerance: Int,
   private val frameGroupSize: Int)
-  extends ImageAnalyzer with ColorSupport {
+    extends ImageAnalyzer with ColorSupport {
 
   private var currentFrame = 0
   private var currentFrameMap = Map[Int, Int]()

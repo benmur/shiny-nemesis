@@ -1,8 +1,8 @@
 /**
- * Copyright (c) 2012 Rached Ben Mustapha
- *
- * See the file LICENSE for copying permission.
- */
+  * Copyright (c) 2012 Rached Ben Mustapha
+  *
+  * See the file LICENSE for copying permission.
+  */
 
 package net.benmur.frameprint
 
@@ -25,5 +25,5 @@ object FramePrint extends App {
         new ImageColorOutput(new File(file).getName().replaceAll("\\.[\\d\\w]+$", ".png")).writeStatsFrom(colorAnalyzer)
     }
   }
-  println("Took %ds".format((System.currentTimeMillis() - executionStart)/1000))
+  println("Took %ds".format((System.currentTimeMillis() - executionStart) / 1000))
 }

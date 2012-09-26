@@ -1,23 +1,23 @@
 /**
- * Copyright (c) 2012 Rached Ben Mustapha
- *
- * See the file LICENSE for copying permission.
- */
+  * Copyright (c) 2012 Rached Ben Mustapha
+  *
+  * See the file LICENSE for copying permission.
+  */
 
 package net.benmur.frameprint.input.xuggle
 
 import java.awt.image.BufferedImage
+
 import scala.annotation.tailrec
+
 import com.xuggle.mediatool.ToolFactory
+
 import net.benmur.frameprint.Config.MAX_READS
 import net.benmur.frameprint.analyzer.ImageAnalyzer
-import net.benmur.frameprint.input.Eof
-import net.benmur.frameprint.input.ReadStatus
-import net.benmur.frameprint.input.Reader
-import net.benmur.frameprint.input.Error
+import net.benmur.frameprint.input.{Eof, Error, ReadStatus, Reader}
 
 class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
-  extends Reader {
+    extends Reader {
 
   val xreader = ToolFactory.makeReader(file)
   val frameListener = new XuggleFrameListener(analyzer, xreader.getContainer())

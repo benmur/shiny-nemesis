@@ -1,8 +1,8 @@
 /**
- * Copyright (c) 2012 Rached Ben Mustapha
- *
- * See the file LICENSE for copying permission.
- */
+  * Copyright (c) 2012 Rached Ben Mustapha
+  *
+  * See the file LICENSE for copying permission.
+  */
 
 package net.benmur.frameprint.input.xuggle
 
@@ -10,8 +10,7 @@ import com.xuggle.mediatool.MediaListenerAdapter
 import com.xuggle.mediatool.event.IVideoPictureEvent
 import com.xuggle.xuggler.IContainer
 
-import net.benmur.frameprint.analyzer.ImageAnalyzer
-import net.benmur.frameprint.analyzer.Picture
+import net.benmur.frameprint.analyzer.{ImageAnalyzer, Picture}
 
 class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: IContainer) extends MediaListenerAdapter {
   private var lastPrint = System.currentTimeMillis()
