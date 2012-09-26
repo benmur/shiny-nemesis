@@ -62,8 +62,6 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   @tailrec
   private def nextKeyFrame(stream: IStream, index: Int): Option[Int] =
     if (index >= stream.getNumIndexEntries()) {
-      Some(stream.getNumIndexEntries() - 1)
-    } else if (index == stream.getNumIndexEntries() - 1) {
       eofDetected = true
       None
     } else
