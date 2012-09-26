@@ -14,8 +14,7 @@ import net.benmur.frameprint.Config
 
 class ColorAnalyzer(
   private val tolerance: Int,
-  private val frameGroupSize: Int,
-  private val endOfWorkAction: (ImageAnalyzer with ColorSupport) => Unit)
+  private val frameGroupSize: Int)
   extends ImageAnalyzer with ColorSupport {
 
   private var currentFrame = 0
@@ -24,9 +23,7 @@ class ColorAnalyzer(
     ArrayBuffer[(Option[ColorQuantity], Option[ColorQuantity])]()
 
   override def finish() = {
-    println("color analyzer finishing")
     rotateColorMap()
-    endOfWorkAction(this)
   }
 
   override def frameGroups = finalMaps size
