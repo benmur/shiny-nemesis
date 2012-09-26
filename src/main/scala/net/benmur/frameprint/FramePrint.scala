@@ -8,16 +8,15 @@ package net.benmur.frameprint
 
 import java.io.File
 
-import net.benmur.frameprint.analyzer.{ ColorAnalyzer, ColorSupport, ImageAnalyzer }
+import net.benmur.frameprint.analyzer.ColorAnalyzer
 import net.benmur.frameprint.input.{ Eof, Error }
 import net.benmur.frameprint.input.xuggle.XuggleReader
 import net.benmur.frameprint.output.ImageColorOutput
 
 object FramePrint extends App {
   args foreach { file =>
-    val colorAnalyzer = new ColorAnalyzer(
-      Config.COLOR_DIFF_THRESHOLD, 1)
-
+    val colorAnalyzer = new ColorAnalyzer(Config.COLOR_DIFF_THRESHOLD, 1)
+    println("Reading " + file)
     new XuggleReader(file, colorAnalyzer).readAll match {
       case Error =>
         println("Finishing unexpectedly, not writing output")
