@@ -24,7 +24,7 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
     container.seekKeyFrame(event.getStreamIndex(), 150 * totalFrames, IContainer.SEEK_FLAG_FRAME)
   }
 
-  def countFrames(event: IVideoPictureEvent) = {
+  private def countFrames(event: IVideoPictureEvent) = {
     totalFrames += 1
     frames += 1
     val now = System.currentTimeMillis()
@@ -35,5 +35,5 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
     }
   }
 
-  implicit def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
+  implicit private def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
 }
