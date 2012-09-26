@@ -13,6 +13,7 @@ import net.benmur.frameprint.input.Eof
 import net.benmur.frameprint.input.xuggle.XuggleReader
 import net.benmur.frameprint.output.ImageColorOutput
 import java.io.File
+import net.benmur.frameprint.input.Error
 
 object FramePrint {
   def main(args: Array[String]): Unit = {
@@ -26,8 +27,9 @@ object FramePrint {
       val reader = new XuggleReader(file, colorAnalyzer)
 
       reader.readAll match {
-        case Eof => println("got eof")
-        case e => println("_ got " + e)
+        case Error =>
+          println("Finishing unexpectedly")
+        case Eof =>
       }
     }
   }
