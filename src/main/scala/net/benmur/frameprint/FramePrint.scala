@@ -12,6 +12,7 @@ import net.benmur.frameprint.analyzer.ImageAnalyzer
 import net.benmur.frameprint.input.Eof
 import net.benmur.frameprint.input.xuggle.XuggleReader
 import net.benmur.frameprint.output.ImageColorOutput
+import java.io.File
 
 object FramePrint {
   def main(args: Array[String]): Unit = {
@@ -19,7 +20,7 @@ object FramePrint {
       val colorAnalyzer = new ColorAnalyzer(
         Config.COLOR_DIFF_THRESHOLD, 1,
         (c: ImageAnalyzer with ColorSupport) => {
-          new ImageColorOutput(file + ".png").writeStatsFrom(c)
+          new ImageColorOutput(new File(file).getName().replaceAll("\\.[\\d\\w]+$", ".png")).writeStatsFrom(c)
         })
 
       val reader = new XuggleReader(file, colorAnalyzer)
