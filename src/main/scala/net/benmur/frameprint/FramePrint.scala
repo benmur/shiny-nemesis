@@ -13,8 +13,8 @@ import net.benmur.frameprint.input.{ Eof, Error }
 import net.benmur.frameprint.input.xuggle.XuggleReader
 import net.benmur.frameprint.output.ImageColorOutput
 
-object FramePrint {
-  def main(args: Array[String]): Unit = args foreach { file =>
+object FramePrint extends App {
+  args foreach { file =>
     val colorAnalyzer = new ColorAnalyzer(
       Config.COLOR_DIFF_THRESHOLD, 1)
 
@@ -25,4 +25,5 @@ object FramePrint {
         new ImageColorOutput(new File(file).getName().replaceAll("\\.[\\d\\w]+$", ".png")).writeStatsFrom(colorAnalyzer)
     }
   }
+  println("Took %ds".format((System.currentTimeMillis() - executionStart)/1000))
 }
