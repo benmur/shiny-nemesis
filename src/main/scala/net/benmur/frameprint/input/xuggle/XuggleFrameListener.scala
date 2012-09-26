@@ -12,6 +12,7 @@ import com.xuggle.mediatool.MediaListenerAdapter
 import com.xuggle.mediatool.event.IVideoPictureEvent
 import com.xuggle.xuggler.{ IContainer, IStream }
 
+import net.benmur.frameprint.Config
 import net.benmur.frameprint.analyzer.{ ImageAnalyzer, Picture }
 
 class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: IContainer) extends MediaListenerAdapter {
@@ -49,7 +50,8 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   private def seek(event: IVideoPictureEvent) = {
     val streamIndex = event.getStreamIndex()
     val stream = container.getStream(streamIndex toLong)
-    val time = stream.getIndexEntry(nextKeyFrame(stream, 150 * totalFrames)).getTimeStamp()
+    val frameInterval = stream.getNumFrames().toInt / Config.TOTAL_FRAMES
+    val time = stream.getIndexEntry(nextKeyFrame(stream, frameInterval * totalFrames)).getTimeStamp()
     container.seekKeyFrame(streamIndex, time, 0)
   }
 
