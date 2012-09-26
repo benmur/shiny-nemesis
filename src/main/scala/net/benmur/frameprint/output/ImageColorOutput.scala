@@ -12,18 +12,10 @@ import java.io.File
 
 import javax.imageio.ImageIO
 import net.benmur.frameprint.Config
-import net.benmur.frameprint.analyzer.{ ColorQuantity, ColorSupport, ImageAnalyzer }
+import net.benmur.frameprint.analyzer.ColorQuantity
 
-class ImageColorOutput(val outputFile: String) extends Reporter {
-
-  def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport): Unit = {
-    val colors = 0 until analyzer.frameGroups map (analyzer.colorSpreadMap)
-    val image = createImage(colors)
-    writeOut(image, outputFile)
-    println("Wrote to " + outputFile)
-  }
-
-  private def createImage(colors: Seq[(Option[ColorQuantity], Option[ColorQuantity])]): BufferedImage = {
+class ImageColorOutput(val filename: String) extends Reporter[BufferedImage] {
+  protected def renderDoc(colors: ColorSequence) = {
     val h = Config.OUTPUT_IMAGE_HEIGHT
     val h2 = Config.OUTPUT_COLOR2_HEIGHT
     val image = new BufferedImage(colors size, h, BufferedImage.TYPE_INT_ARGB)
@@ -40,6 +32,8 @@ class ImageColorOutput(val outputFile: String) extends Reporter {
     image
   }
 
+  override protected def writeOut(image: BufferedImage) = ImageIO.write(image, "png", new File(filename))
+
   private def drawColor(graphics: Graphics2D, x: Int, y: Int, height: Int, color1: Color, color2: Color) = {
     val paint = new GradientPaint(0, y, color1, 0, y + height, color2);
     graphics.setPaint(paint)
@@ -51,6 +45,4 @@ class ImageColorOutput(val outputFile: String) extends Reporter {
 
   private def transparent(c: Color): Color =
     new Color(c.getRed, c.getGreen, c.getBlue, 0)
-
-  private def writeOut(image: BufferedImage, output: String) = ImageIO.write(image, "png", new File(output))
 }

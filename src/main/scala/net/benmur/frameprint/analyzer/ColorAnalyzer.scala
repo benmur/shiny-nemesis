@@ -6,7 +6,7 @@
 
 package net.benmur.frameprint.analyzer
 
-import scala.collection.mutable.{ArrayBuffer, Map}
+import scala.collection.mutable.{ ArrayBuffer, Map }
 
 import net.benmur.frameprint.Config
 
@@ -25,7 +25,7 @@ class ColorAnalyzer(
   }
 
   override def frameGroups = finalMaps size
-  override def colorSpreadMap(frameGroup: Int): (Option[ColorQuantity], Option[ColorQuantity]) = finalMaps(frameGroup)
+  override def colors = 0 until frameGroups map (finalMaps)
 
   private def cleanupMap(map: scala.collection.Map[Int, Int]) = {
     val top2 = map.

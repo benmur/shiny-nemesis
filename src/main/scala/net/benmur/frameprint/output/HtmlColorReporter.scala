@@ -6,47 +6,34 @@
 
 package net.benmur.frameprint.output
 
-import java.io.{BufferedWriter, FileWriter}
+import java.io.{ BufferedWriter, FileWriter }
 
 import scala.Option.option2Iterable
 import scala.xml.NodeSeq
 
-import net.benmur.frameprint.analyzer.{ColorQuantity, ColorSupport, ImageAnalyzer}
+import net.benmur.frameprint.analyzer.ColorQuantity
 
-class HtmlColorReporter(val outputFile: String) extends Reporter {
-  override def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport) = {
-    val colors = 0 until analyzer.frameGroups flatMap { group =>
-      println("  frame group " + group + "... ")
-      analyzer.colorSpreadMap(group) match {
-        case (q1, q2) => q1 map toHex
-      }
-    }
-
-    val nodeSeq = renderDoc(colors)
-    val output = outputFile.replaceAll("/", "_")
-    writeOut(nodeSeq, output)
-
-    println("Wrote to " + outputFile)
-  }
-
-  private def toHex(rgb: ColorQuantity) = {
-    "%02x%02x%02x".format(rgb.r, rgb.g, rgb.b)
-  }
-
-  private def writeOut(nodes: NodeSeq, output: String) {
-    val writer = new BufferedWriter(new FileWriter(output))
+class HtmlColorReporter(val filename: String) extends Reporter[NodeSeq] {
+  override protected def writeOut(nodes: NodeSeq) {
+    val writer = new BufferedWriter(new FileWriter(filename))
     writer.write(nodes.toString())
     writer.close()
   }
 
-  private def renderDoc(colors: Seq[String]) =
+  override protected def renderDoc(colors: ColorSequence) =
     <html>
       <body>
         {
-          colors map { c =>
-            <div style={ "height: 1px; background-color: #" + c + ";" }>&nbsp;</div>
+          colors flatMap {
+            _._1.map(toHex).map { cc =>
+              <div style={ "height: 1px; background-color: #" + cc + ";" }>&nbsp;</div>
+            }
           }
         }
       </body>
     </html>
+
+  private def toHex(rgb: ColorQuantity) = {
+    "%02x%02x%02x".format(rgb.r, rgb.g, rgb.b)
+  }
 }
