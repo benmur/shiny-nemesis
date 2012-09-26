@@ -28,8 +28,17 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
 
   @tailrec
   private def read(packet: Int): ReadStatus = xreader.readPacket() match {
-    case null => if ((MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0) read(packet + 1) else shutdown()
-    case error => println(error); shutdown()
+    case null =>
+      if ((MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0)
+        read(packet + 1)
+      else
+        shutdown()
+    case error if error.getErrorNumber() == -541478725 =>
+      println("End of file reached")
+      shutdown()
+    case error =>
+      println("Error reading packet: " + error)
+      shutdown()
   }
 
   private def shutdown(): ReadStatus = {
