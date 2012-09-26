@@ -22,7 +22,9 @@ object FramePrint extends App {
       case Error =>
         println("Finishing unexpectedly, not writing output")
       case Eof =>
-        new ImageColorOutput(new File(file).getName().replaceAll("\\.[\\d\\w]+$", ".png")).writeStatsFrom(colorAnalyzer)
+        val outputFile = new File(file).getName().replaceAll("\\.[\\d\\w]+$", ".png")
+        println("End of file reached, writing to " + outputFile)
+        new ImageColorOutput(outputFile).writeStatsFrom(colorAnalyzer)
     }
   }
   println("Took %ds".format((System.currentTimeMillis() - executionStart) / 1000))

@@ -15,7 +15,6 @@ import net.benmur.frameprint.analyzer.{ColorQuantity, ColorSupport, ImageAnalyze
 
 class HtmlColorReporter(val outputFile: String) extends Reporter {
   override def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport) = {
-    println("writing to " + outputFile)
     val colors = 0 until analyzer.frameGroups flatMap { group =>
       println("  frame group " + group + "... ")
       analyzer.colorSpreadMap(group) match {
@@ -27,7 +26,7 @@ class HtmlColorReporter(val outputFile: String) extends Reporter {
     val output = outputFile.replaceAll("/", "_")
     writeOut(nodeSeq, output)
 
-    println("wrote to " + outputFile)
+    println("Wrote to " + outputFile)
   }
 
   private def toHex(rgb: ColorQuantity) = {

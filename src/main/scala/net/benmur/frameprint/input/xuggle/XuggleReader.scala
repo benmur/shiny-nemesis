@@ -32,7 +32,6 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
       else
         shutdown(Eof)
     case error if error.getErrorNumber() == -541478725 =>
-      println("End of file reached")
       shutdown(Eof)
     case error =>
       println("Error reading packet: " + error)

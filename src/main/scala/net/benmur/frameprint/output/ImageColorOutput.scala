@@ -6,23 +6,21 @@
 
 package net.benmur.frameprint.output
 
-import java.awt.{Color, GradientPaint, Graphics2D}
+import java.awt.{ Color, GradientPaint, Graphics2D }
 import java.awt.image.BufferedImage
 import java.io.File
 
 import javax.imageio.ImageIO
 import net.benmur.frameprint.Config
-import net.benmur.frameprint.analyzer.{ColorQuantity, ColorSupport, ImageAnalyzer}
+import net.benmur.frameprint.analyzer.{ ColorQuantity, ColorSupport, ImageAnalyzer }
 
 class ImageColorOutput(val outputFile: String) extends Reporter {
 
   def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport): Unit = {
-    val output = outputFile.replaceAll("/", "_")
-    println("writing to " + output)
     val colors = 0 until analyzer.frameGroups map (analyzer.colorSpreadMap)
     val image = createImage(colors)
-    writeOut(image, output)
-    println("wrote to " + output)
+    writeOut(image, outputFile)
+    println("Wrote to " + outputFile)
   }
 
   private def createImage(colors: Seq[(Option[ColorQuantity], Option[ColorQuantity])]): BufferedImage = {
