@@ -7,16 +7,14 @@
 package net.benmur.frameprint.input.xuggle
 
 import java.awt.image.BufferedImage
-
 import scala.annotation.tailrec
-
 import com.xuggle.mediatool.ToolFactory
-
 import net.benmur.frameprint.Config.MAX_READS
 import net.benmur.frameprint.analyzer.ImageAnalyzer
 import net.benmur.frameprint.input.Eof
 import net.benmur.frameprint.input.ReadStatus
 import net.benmur.frameprint.input.Reader
+import net.benmur.frameprint.input.Error
 
 class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
   extends Reader {
@@ -32,18 +30,18 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
       if ((MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0)
         read(packet + 1)
       else
-        shutdown()
+        shutdown(Eof)
     case error if error.getErrorNumber() == -541478725 =>
       println("End of file reached")
-      shutdown()
+      shutdown(Eof)
     case error =>
       println("Error reading packet: " + error)
-      shutdown()
+      shutdown(Error)
   }
 
-  private def shutdown(): ReadStatus = {
+  private def shutdown(status: ReadStatus): ReadStatus = {
     analyzer.finish()
-    Eof
+    status
   }
 
   override def readAll = try {
