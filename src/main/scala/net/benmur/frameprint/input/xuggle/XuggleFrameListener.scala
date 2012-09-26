@@ -29,10 +29,18 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
     frames += 1
     val now = System.currentTimeMillis()
     if (now - lastPrint >= 1000) {
-      println("got picture, ts=" + event.getTimeStamp() + " fps=~" + frames + " total=" + totalFrames)
+      println("ts=" + formatTs(event.getTimeStamp()) + " fps=~" + frames + " total=" + totalFrames)
       lastPrint = now
       frames = 0
     }
+  }
+
+  private def formatTs(ts: Long): String = {
+    val tsSeconds = ts / 1000000
+    val seconds = tsSeconds % 60
+    val minutes = (tsSeconds / 60) % 60
+    val hours = (tsSeconds / 3600) % 60
+    "%02d:%02d:%02d".format(hours, minutes, seconds)
   }
 
   implicit private def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
