@@ -32,8 +32,8 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
     totalFrames += 1
     frames += 1
     val now = System.currentTimeMillis()
-    if (now - lastPrint >= 1000) {
-      println("ts=" + formatTs(event.getTimeStamp()) + " fps=~" + frames + " total=" + totalFrames)
+    if (now - lastPrint >= 2000) {
+      println("ts=" + formatTs(event.getTimeStamp()) + " fps=~" + frames / 2 + " total=" + totalFrames)
       lastPrint = now
       frames = 0
     }
