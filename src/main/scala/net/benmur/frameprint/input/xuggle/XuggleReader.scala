@@ -14,7 +14,7 @@ import com.xuggle.mediatool.ToolFactory
 
 import net.benmur.frameprint.Config.MAX_READS
 import net.benmur.frameprint.analyzer.ImageAnalyzer
-import net.benmur.frameprint.input.{Eof, Error, ReadStatus, Reader}
+import net.benmur.frameprint.input.{ Eof, Error, ReadStatus, Reader }
 
 class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
     extends Reader {
@@ -27,7 +27,7 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
   @tailrec
   private def read(packet: Int): ReadStatus = xreader.readPacket() match {
     case null =>
-      if ((MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0)
+      if (maxNotReached(packet) && !frameListener.eofDetected)
         read(packet + 1)
       else
         shutdown(Eof)
@@ -42,6 +42,8 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
     analyzer.finish()
     status
   }
+
+  private def maxNotReached(packet: Int) = (MAX_READS > 0 && packet <= MAX_READS) || MAX_READS < 0
 
   override def readAll = try {
     read(0)

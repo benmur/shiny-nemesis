@@ -20,6 +20,8 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
   private var frames = 0
   private var totalFrames = 0
 
+  var eofDetected = false
+
   override def onVideoPicture(event: IVideoPictureEvent): Unit = {
     countFrames(event)
     imageAnalyzer receive event
@@ -51,17 +53,22 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
     val streamIndex = event.getStreamIndex()
     val stream = container.getStream(streamIndex toLong)
     val frameInterval = stream.getNumFrames().toInt / Config.TOTAL_FRAMES
-    val time = stream.getIndexEntry(nextKeyFrame(stream, frameInterval * totalFrames)).getTimeStamp()
-    container.seekKeyFrame(streamIndex, time, 0)
+    nextKeyFrame(stream, frameInterval * totalFrames) map { i =>
+      val time = stream.getIndexEntry(i).getTimeStamp()
+      container.seekKeyFrame(streamIndex, time, 0)
+    }
   }
 
   @tailrec
-  private def nextKeyFrame(stream: IStream, index: Int): Int =
-    if (index >= stream.getNumIndexEntries())
-      stream.getNumIndexEntries() - 1
-    else
+  private def nextKeyFrame(stream: IStream, index: Int): Option[Int] =
+    if (index >= stream.getNumIndexEntries()) {
+      Some(stream.getNumIndexEntries() - 1)
+    } else if (index == stream.getNumIndexEntries() - 1) {
+      eofDetected = true
+      None
+    } else
       stream.getIndexEntry(index) match {
-        case e if e.isKeyFrame() => index
+        case e if e.isKeyFrame() => Some(index)
         case _                   => nextKeyFrame(stream, index + 1)
       }
 }
