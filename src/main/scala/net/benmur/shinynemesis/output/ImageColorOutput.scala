@@ -4,15 +4,15 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.output
+package net.benmur.shinynemesis.output
 
 import java.awt.{ Color, GradientPaint, Graphics2D }
 import java.awt.image.BufferedImage
 import java.io.File
 
 import javax.imageio.ImageIO
-import net.benmur.frameprint.Config
-import net.benmur.frameprint.analyzer.ColorQuantity
+import net.benmur.shinynemesis.Config
+import net.benmur.shinynemesis.analyzer.ColorQuantity
 
 class ImageColorOutput(val filename: String) extends Reporter[BufferedImage] {
   protected def renderDoc(colors: ColorSequence) = {

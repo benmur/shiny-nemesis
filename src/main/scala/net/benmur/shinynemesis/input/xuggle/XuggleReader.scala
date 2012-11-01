@@ -4,7 +4,7 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.input.xuggle
+package net.benmur.shinynemesis.input.xuggle
 
 import java.awt.image.BufferedImage
 
@@ -12,9 +12,9 @@ import scala.annotation.tailrec
 
 import com.xuggle.mediatool.ToolFactory
 
-import net.benmur.frameprint.Config.MAX_READS
-import net.benmur.frameprint.analyzer.ImageAnalyzer
-import net.benmur.frameprint.input.{ Eof, Error, ReadStatus, Reader }
+import net.benmur.shinynemesis.Config.MAX_READS
+import net.benmur.shinynemesis.analyzer.ImageAnalyzer
+import net.benmur.shinynemesis.input.{ Eof, Error, ReadStatus, Reader }
 
 class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
     extends Reader {
@@ -47,6 +47,10 @@ class XuggleReader(val file: String, val analyzer: ImageAnalyzer)
 
   override def readAll = try {
     read(0)
+  } catch {
+    case e: RuntimeException =>
+      e.printStackTrace()
+      Error
   } finally {
     xreader.close()
   }

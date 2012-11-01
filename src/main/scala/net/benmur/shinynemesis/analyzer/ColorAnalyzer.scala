@@ -4,11 +4,11 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.analyzer
+package net.benmur.shinynemesis.analyzer
 
 import scala.collection.mutable.{ ArrayBuffer, Map }
 
-import net.benmur.frameprint.Config
+import net.benmur.shinynemesis.Config
 
 class ColorAnalyzer(
   private val tolerance: Int,

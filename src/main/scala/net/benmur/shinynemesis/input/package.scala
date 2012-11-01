@@ -4,7 +4,7 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint
+package net.benmur.shinynemesis
 
 package object input {
   sealed trait ReadStatus

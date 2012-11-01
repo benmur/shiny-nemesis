@@ -4,15 +4,15 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint
+package net.benmur.shinynemesis
 
 import java.io.File
 
-import net.benmur.frameprint.analyzer.{ ColorSupport, ImageAnalyzer }
+import net.benmur.shinynemesis.analyzer.{ ColorSupport, ImageAnalyzer }
 
 package object output {
   trait Reporter[T] {
-    type ColorSequence = net.benmur.frameprint.analyzer.ColorSequence
+    type ColorSequence = net.benmur.shinynemesis.analyzer.ColorSequence
 
     def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport) = {
       writeOut(renderDoc(analyzer colors))

@@ -1,6 +1,6 @@
 import AssemblyKeys._
 
-name := "frameprint"
+name := "shinynemesis"
 
 version := "0.1"
 
@@ -10,7 +10,7 @@ resolvers ++= Seq(
 
 libraryDependencies += "xuggle" % "xuggle-xuggler" % "5.2"
 
-mainClass := Some("net.benmur.frameprint.FramePrint")
+mainClass := Some("net.benmur.shinynemesis.ShinyNemesis")
 
 assemblySettings
 

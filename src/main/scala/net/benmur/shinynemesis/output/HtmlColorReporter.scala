@@ -4,14 +4,14 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.output
+package net.benmur.shinynemesis.output
 
 import java.io.{ BufferedWriter, FileWriter }
 
 import scala.Option.option2Iterable
 import scala.xml.NodeSeq
 
-import net.benmur.frameprint.analyzer.ColorQuantity
+import net.benmur.shinynemesis.analyzer.ColorQuantity
 
 class HtmlColorReporter(val filename: String) extends Reporter[NodeSeq] {
   override protected def writeOut(nodes: NodeSeq) {

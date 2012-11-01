@@ -4,11 +4,11 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.input.xuggle
+package net.benmur.shinynemesis.input.xuggle
 
 import java.awt.image.BufferedImage
 
-import net.benmur.frameprint.analyzer.Picture
+import net.benmur.shinynemesis.analyzer.Picture
 
 class XuggleBufferedImagePictureImpl(val i: BufferedImage) extends Picture {
   override def eachPixel(block: Int => Unit) =

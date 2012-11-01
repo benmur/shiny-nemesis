@@ -4,16 +4,16 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint
+package net.benmur.shinynemesis
 
 import java.io.File
 
-import net.benmur.frameprint.analyzer.ColorAnalyzer
-import net.benmur.frameprint.input.{ Eof, Error }
-import net.benmur.frameprint.input.xuggle.XuggleReader
-import net.benmur.frameprint.output.ImageColorOutput
+import net.benmur.shinynemesis.analyzer.ColorAnalyzer
+import net.benmur.shinynemesis.input.{ Eof, Error }
+import net.benmur.shinynemesis.input.xuggle.XuggleReader
+import net.benmur.shinynemesis.output.ImageColorOutput
 
-object FramePrint extends App {
+object ShinyNemesis extends App {
   args foreach { file =>
     val outputFile = new File(file).getName().replaceAll("\\.[\\d\\w]+$", ".png")
     val out = new ImageColorOutput(outputFile)

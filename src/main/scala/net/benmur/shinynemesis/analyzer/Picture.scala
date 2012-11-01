@@ -4,7 +4,7 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.analyzer
+package net.benmur.shinynemesis.analyzer
 
 trait Picture {
   def eachPixel(block: Int => Unit)

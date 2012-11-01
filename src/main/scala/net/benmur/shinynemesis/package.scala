@@ -6,7 +6,7 @@
 
 package net.benmur
 
-package object frameprint {
+package object shinynemesis {
   object Config {
     val MAX_READS = -1
 

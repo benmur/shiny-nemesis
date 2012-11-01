@@ -4,7 +4,7 @@
   * See the file LICENSE for copying permission.
   */
 
-package net.benmur.frameprint.input.xuggle
+package net.benmur.shinynemesis.input.xuggle
 
 import scala.annotation.tailrec
 
@@ -12,8 +12,8 @@ import com.xuggle.mediatool.MediaListenerAdapter
 import com.xuggle.mediatool.event.IVideoPictureEvent
 import com.xuggle.xuggler.{ IContainer, IStream }
 
-import net.benmur.frameprint.Config
-import net.benmur.frameprint.analyzer.{ ImageAnalyzer, Picture }
+import net.benmur.shinynemesis.Config
+import net.benmur.shinynemesis.analyzer.{ ImageAnalyzer, Picture }
 
 class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: IContainer) extends MediaListenerAdapter {
   private var lastPrint = System.currentTimeMillis()
