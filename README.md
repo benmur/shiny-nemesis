@@ -35,7 +35,7 @@ Authors/Licensing?
 
 shiny-nemesis is:
 
-- (c) 2012 Rached Ben Mustapha <rached@benmur.net>
+- (c) 2012-2013 Rached Ben Mustapha <rached@benmur.net>
 - licensed under the MIT license, please see the LICENSE file for details.
 
 What is that name about?
