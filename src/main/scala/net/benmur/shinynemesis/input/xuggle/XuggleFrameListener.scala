@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2012 Rached Ben Mustapha
+  * Copyright (c) 2012-2013 Rached Ben Mustapha
   *
   * See the file LICENSE for copying permission.
   */
@@ -24,7 +24,7 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
 
   override def onVideoPicture(event: IVideoPictureEvent): Unit = {
     countFrames(event)
-    imageAnalyzer receive event
+    imageAnalyzer receive toPicture(event)
     seek(event)
   }
 
@@ -47,11 +47,11 @@ class XuggleFrameListener(val imageAnalyzer: ImageAnalyzer, val container: ICont
     "%02d:%02d:%02d".format(hours, minutes, seconds)
   }
 
-  implicit private def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
+  private def toPicture(e: IVideoPictureEvent): Picture = new XuggleBufferedImagePictureImpl(e.getImage())
 
   private def seek(event: IVideoPictureEvent) = {
     val streamIndex = event.getStreamIndex()
-    val stream = container.getStream(streamIndex toLong)
+    val stream = container.getStream(streamIndex.toLong)
     val frameInterval = stream.getNumFrames().toInt / Config.TOTAL_FRAMES
     nextKeyFrame(stream, frameInterval * totalFrames) map { i =>
       val time = stream.getIndexEntry(i).getTimeStamp()

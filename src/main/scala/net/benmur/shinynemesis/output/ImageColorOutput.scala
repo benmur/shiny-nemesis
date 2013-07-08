@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2012 Rached Ben Mustapha
+  * Copyright (c) 2012-2013 Rached Ben Mustapha
   *
   * See the file LICENSE for copying permission.
   */
@@ -18,13 +18,21 @@ class ImageColorOutput(val filename: String) extends Reporter[BufferedImage] {
   protected def renderDoc(colors: ColorSequence) = {
     val h = Config.OUTPUT_IMAGE_HEIGHT
     val h2 = Config.OUTPUT_COLOR2_HEIGHT
-    val image = new BufferedImage(colors size, h, BufferedImage.TYPE_INT_ARGB)
+    val image = new BufferedImage(colors.size, h, BufferedImage.TYPE_INT_ARGB)
     val g = image.createGraphics()
 
-    colors.zipWithIndex map {
+    colors.zipWithIndex foreach {
       case ((c1, c2), i) =>
-        c1 map { c => drawColor(g, i, 0, h, c, c) }
-        c2 map { c => drawColor(g, i, h - h2, h2, transparent(c), c) }
+        c1 map { c =>
+          new Color(c.r, c.g, c.b)
+        } foreach { color =>
+          drawColor(g, i, 0, h, color, color)
+        }
+        c2 map { c =>
+          new Color(c.r, c.g, c.b)
+        } foreach { color =>
+          drawColor(g, i, h - h2, h2, transparent(color), color)
+        }
     }
 
     g.dispose()
@@ -39,9 +47,6 @@ class ImageColorOutput(val filename: String) extends Reporter[BufferedImage] {
     graphics.setPaint(paint)
     graphics.drawLine(x, y, x, y + height - 1)
   }
-
-  private implicit def colorQuantity2Color(cq: ColorQuantity): Color =
-    new Color(cq.r, cq.g, cq.b)
 
   private def transparent(c: Color): Color =
     new Color(c.getRed, c.getGreen, c.getBlue, 0)

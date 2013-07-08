@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2012 Rached Ben Mustapha
+  * Copyright (c) 2012-2013 Rached Ben Mustapha
   *
   * See the file LICENSE for copying permission.
   */
@@ -24,7 +24,7 @@ class ColorAnalyzer(
     rotateColorMap()
   }
 
-  override def frameGroups = finalMaps size
+  override def frameGroups = finalMaps.size
   override def colors = 0 until frameGroups map (finalMaps)
 
   private def cleanupMap(map: scala.collection.Map[Int, Int]) = {
@@ -33,7 +33,7 @@ class ColorAnalyzer(
       sortBy(_._2).
       takeRight(2).
       map(toQuantity)
-    (top2 headOption, if (top2.isEmpty) None else top2.tail headOption)
+    (top2.headOption, if (top2.isEmpty) None else top2.tail.headOption)
   }
 
   private def toQuantity(kv: (Int, Int)): ColorQuantity = kv match {

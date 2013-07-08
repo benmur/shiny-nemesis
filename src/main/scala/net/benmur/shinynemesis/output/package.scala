@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2012 Rached Ben Mustapha
+  * Copyright (c) 2012-2013 Rached Ben Mustapha
   *
   * See the file LICENSE for copying permission.
   */
@@ -15,7 +15,7 @@ package object output {
     type ColorSequence = net.benmur.shinynemesis.analyzer.ColorSequence
 
     def writeStatsFrom(analyzer: ImageAnalyzer with ColorSupport) = {
-      writeOut(renderDoc(analyzer colors))
+      writeOut(renderDoc(analyzer.colors))
       println("Wrote to " + filename)
     }
 
