@@ -14,6 +14,8 @@ resolvers ++= Seq(
 
 libraryDependencies += "xuggle" % "xuggle-xuggler" % "5.2"
 
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC2"
+
 mainClass := Some("net.benmur.shinynemesis.ShinyNemesis")
 
 assemblySettings
