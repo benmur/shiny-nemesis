@@ -6,7 +6,7 @@ version := "0.2-SNAPSHOT"
 
 scalaVersion := "2.10.2"
 
-scalacOptions ++= Seq("-deprecation", "–unchecked", "-feature")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 resolvers ++= Seq(
     "Xuggle Repo" at "http://xuggle.googlecode.com/svn/trunk/repo/share/java/"
