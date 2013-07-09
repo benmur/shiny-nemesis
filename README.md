@@ -16,7 +16,7 @@ What does it look like?
 Two quick steps to see for yourself (provided you have sbt 0.12 installed):
 
 1. sbt assembly
-2. java -jar target/shinynemesis-VERSION-fat.jar /path/to/videofile1 [[/path/to/videofile2] ...]
+2. java -jar target/scala-2.10/shinynemesis-VERSION-fat.jar /path/to/videofile1 [[/path/to/videofile2] ...]
 
 Images will then be output in the current directory.
 
